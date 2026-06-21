@@ -1,0 +1,6 @@
+{
+  "name": "Seasonal Reward Portal",
+  "description": "An interactive reward program portal to claim seasonal vouchers and rewards.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
