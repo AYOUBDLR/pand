@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { Gift, ExternalLink, HelpCircle, ArrowRight } from 'lucide-react';
-import { motion, AnimatePresence } from 'motion/react';
+import { ExternalLink } from 'lucide-react';
+import { motion } from 'motion/react';
 import FAQAccordion from './components/FAQAccordion';
 import { PandoraCrownO } from './components/PandoraLogo';
 
