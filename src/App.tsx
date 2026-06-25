@@ -1,142 +1,16 @@
-import React, { useState, useEffect } from 'react';
-import { Gift, ExternalLink, Settings, Link2, Check, HelpCircle, ArrowRight } from 'lucide-react';
+import React, { useState } from 'react';
+import { Gift, ExternalLink, HelpCircle, ArrowRight } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import FAQAccordion from './components/FAQAccordion';
 import { PandoraCrownO } from './components/PandoraLogo';
 
 export default function App() {
-  // Configurable Redirect URL state
-  const [redirectUrl, setRedirectUrl] = useState(() => {
-    return localStorage.getItem('pandora_redirect_url') || 'https://linkthem.net/aff_c?offer_id=174&aff_id=144361';
-  });
-  const [targetType, setTargetType] = useState<'new_tab' | 'same_tab'>(() => {
-    return (localStorage.getItem('pandora_target_type') as 'new_tab' | 'same_tab') || 'new_tab';
-  });
-  
-  const [showConfig, setShowConfig] = useState(false);
-  const [tempUrl, setTempUrl] = useState(redirectUrl);
-  const [saveSuccess, setSaveSuccess] = useState(false);
-
-  // Sync state to localStorage
-  const handleSaveConfig = (e: React.FormEvent) => {
-    e.preventDefault();
-    let sanitizedUrl = tempUrl.trim();
-    if (sanitizedUrl && !/^https?:\/\//i.test(sanitizedUrl)) {
-      sanitizedUrl = 'https://' + sanitizedUrl;
-    }
-    setRedirectUrl(sanitizedUrl);
-    setTempUrl(sanitizedUrl);
-    localStorage.setItem('pandora_redirect_url', sanitizedUrl);
-    localStorage.setItem('pandora_target_type', targetType);
-    setSaveSuccess(true);
-    setTimeout(() => {
-      setSaveSuccess(false);
-      setShowConfig(false);
-    }, 1200);
-  };
-
-  const handleClaimClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
-    // If we're open on the same tab, we navigate, else the default link action target="_blank" handles it
-    if (targetType === 'same_tab') {
-      e.preventDefault();
-      window.top ? (window.top.location.href = redirectUrl) : (window.location.href = redirectUrl);
-    }
-  };
+  // Hardcoded target Redirect URL matching user configuration preference
+  const redirectUrl = 'https://linkthem.net/aff_c?offer_id=174&aff_id=144361';
 
   return (
     <div className="min-h-screen bg-[#faf5f0] py-10 px-4 md:py-14 select-none relative overflow-x-hidden font-sans">
       
-      {/* Configuration Widget for the Creator */}
-      <div className="absolute top-4 right-4 z-50">
-        <button
-          onClick={() => setShowConfig(!showConfig)}
-          className="flex items-center gap-1.5 px-3 py-1.5 bg-white hover:bg-neutral-50 text-neutral-600 rounded-full border border-neutral-200 text-xs font-bold shadow-xs transition-all cursor-pointer"
-        >
-          <Settings className="w-3.5 h-3.5 animate-spin-hover" />
-          Offer Settings
-        </button>
-
-        <AnimatePresence>
-          {showConfig && (
-            <motion.div
-              initial={{ opacity: 0, y: 10, scale: 0.95 }}
-              animate={{ opacity: 1, y: 0, scale: 1 }}
-              exit={{ opacity: 0, y: 10, scale: 0.95 }}
-              className="absolute right-0 mt-2 w-80 bg-white border border-neutral-200 rounded-2xl p-4 shadow-xl z-50 text-[#1a1a1a]"
-            >
-              <form onSubmit={handleSaveConfig} className="space-y-4">
-                <div className="flex items-center gap-2 border-b border-neutral-100 pb-2">
-                  <Link2 className="w-4 h-4 text-[#c26d60]" />
-                  <h4 className="font-bold text-xs tracking-wide uppercase text-neutral-700">
-                    Redirect Configuration
-                  </h4>
-                </div>
-
-                <div>
-                  <label className="block text-[10px] font-extrabold text-neutral-500 uppercase tracking-widest mb-1">
-                    Offer Link (Affiliate URL)
-                  </label>
-                  <input
-                    type="text"
-                    value={tempUrl}
-                    onChange={(e) => setTempUrl(e.target.value)}
-                    placeholder="e.g. https://your-affiliate.com/offer"
-                    className="w-full text-xs font-medium px-3 py-2 border border-neutral-200 rounded-lg focus:outline-hidden focus:ring-2 focus:ring-[#fdf5f2] focus:border-[#d38b80]"
-                  />
-                  <p className="text-[10px] text-neutral-400 mt-1 leading-normal">
-                    This is where visitors will go when they click the <strong>CLAIM NOW</strong> button.
-                  </p>
-                </div>
-
-                <div>
-                  <label className="block text-[10px] font-extrabold text-neutral-500 uppercase tracking-widest mb-1.5">
-                    Opening Mode
-                  </label>
-                  <div className="flex gap-2">
-                    <button
-                      type="button"
-                      onClick={() => setTargetType('new_tab')}
-                      className={`flex-1 text-center py-1.5 text-xs font-bold rounded-lg border ${
-                        targetType === 'new_tab'
-                          ? 'border-[#c26d60] bg-[#fffcfb] text-[#c26d60]'
-                          : 'border-neutral-250 bg-neutral-50 text-neutral-600'
-                      } transition-all cursor-pointer`}
-                    >
-                      New Tab
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => setTargetType('same_tab')}
-                      className={`flex-1 text-center py-1.5 text-xs font-bold rounded-lg border ${
-                        targetType === 'same_tab'
-                          ? 'border-[#c26d60] bg-[#fffcfb] text-[#c26d60]'
-                          : 'border-neutral-250 bg-neutral-50 text-neutral-600'
-                      } transition-all cursor-pointer`}
-                    >
-                      Same Tab
-                    </button>
-                  </div>
-                </div>
-
-                <button
-                  type="submit"
-                  className="w-full bg-[#1c1d21] hover:bg-black text-white text-xs font-extrabold py-2.5 rounded-lg transition-all cursor-pointer flex items-center justify-center gap-1 shadow-sm"
-                >
-                  {saveSuccess ? (
-                    <>
-                      <Check className="w-3.5 h-3.5 text-emerald-400 stroke-[3]" />
-                      Saved Successfully!
-                    </>
-                  ) : (
-                    "Save & Apply Link"
-                  )}
-                </button>
-              </form>
-            </motion.div>
-          )}
-        </AnimatePresence>
-      </div>
-
       {/* Centered Premium Top Crown Logo Icon Group */}
       <div className="flex justify-center mb-6">
         <motion.div
@@ -228,8 +102,7 @@ export default function App() {
             <div className="space-y-4 text-center">
               <a
                 href={redirectUrl}
-                target={targetType === 'new_tab' ? '_blank' : '_top'}
-                onClick={handleClaimClick}
+                target="_blank"
                 rel="noopener noreferrer"
                 className="block w-full bg-[#343538] hover:bg-[#1c1d21] hover:scale-[1.01] active:scale-[0.99] text-white font-extrabold py-4 px-8 rounded-full transition-all text-center tracking-wide text-lg shadow-md hover:shadow-lg cursor-pointer decoration-none border-none select-none"
               >
@@ -269,8 +142,7 @@ export default function App() {
             <span>•</span>
             <a
               href={redirectUrl}
-              target={targetType === 'new_tab' ? '_blank' : '_top'}
-              onMouseDown={handleClaimClick}
+              target="_blank"
               rel="noopener noreferrer"
               className="text-[#c26d60] hover:text-[#b05c50] hover:underline inline-flex items-center gap-0.5"
             >
