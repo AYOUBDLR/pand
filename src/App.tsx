@@ -7,7 +7,7 @@ import { PandoraCrownO } from './components/PandoraLogo';
 export default function App() {
   // Configurable Redirect URL state
   const [redirectUrl, setRedirectUrl] = useState(() => {
-    return localStorage.getItem('pandora_redirect_url') || 'https://glstrk.com/?offer_ids=MTgxLDE3NA%3D%3D&affiliate_id=MTQ0MzYx';
+    return localStorage.getItem('pandora_redirect_url') || 'https://linkthem.net/aff_c?offer_id=174&aff_id=144361';
   });
   const [targetType, setTargetType] = useState<'new_tab' | 'same_tab'>(() => {
     return (localStorage.getItem('pandora_target_type') as 'new_tab' | 'same_tab') || 'new_tab';
