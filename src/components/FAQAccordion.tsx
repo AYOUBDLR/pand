@@ -36,10 +36,10 @@ export default function FAQAccordion() {
                 onClick={() => toggleIndex(idx)}
                 className="w-full text-left px-5 py-5 flex items-center justify-between gap-4 cursor-pointer focus:outline-hidden"
               >
-                <span className="font-bold text-[#c26d60] text-sm md:text-base leading-snug hover:text-[#b05c50] transition-colors">
+                <span className="font-bold text-[#0052cc] text-sm md:text-base leading-snug hover:text-[#0044b3] transition-colors">
                   {faq.question}
                 </span>
-                <span className="text-[#c26d60] shrink-0 bg-[#faf1ec] w-7 h-7 rounded-full flex items-center justify-center">
+                <span className="text-[#0052cc] shrink-0 bg-[#ebf5ff] w-7 h-7 rounded-full flex items-center justify-center">
                   <motion.div
                     animate={{ rotate: isOpen ? 180 : 0 }}
                     transition={{ duration: 0.2, ease: "easeInOut" }}
